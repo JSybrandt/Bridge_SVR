@@ -21,7 +21,7 @@ load('totalData.mat');
 
 fixedTd = mod(Td,24);
 
-data = [amax' fixedTd' n' Tact' rh' m' k' wn' e' c' u' v'];
+data = [amax' Tact' n' rh' m' k' wn' e' c' u' v'];
 
 [data,mu,sig] = zscore(data);
 mu = mu';
@@ -90,7 +90,7 @@ for i = cRange
     Z(:,i) = X;
     
     Y = svmpredict(zeros(testSize,1),Z,model,  '-q');
-    Yt = invZScore(Y, mu(cRange), sig(cRange));
+    Yt = invZScore(Y, mu(1), sig(1));
     Xt = invZScore(X, mu(cRange), sig(cRange));
     plot(Xt,Yt);
     hold on;
