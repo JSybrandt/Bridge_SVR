@@ -20,18 +20,26 @@ clear;
 load('totalData.mat');
 
 fixedTd = mod(Td,24);
+avgA = sum(a) ./ size(a,1);
+fixedMaxA = abs(amax);
 
-data = [amax' Tact' n' rh' m' k' wn' e' c' u' v'];
+%acel depends | WEATHER | car sensors|
+data = [fixedMaxA'  Tact' rh' fixedTd'    a' ];
+
+tmpIndex = 2;
+humidityIndex = 3;
+timeIndex = 4;
+weatherIndicies = 2:4;
+accelIndicies = 5:(size(a,1)+4);
+
+%data = [avgA' avgA'];
 
 [data,mu,sig] = zscore(data);
 mu = mu';
 sig = sig';
 
-%data = data + ((rand(size(data))*2 - 1) .* (rand(size(data)) < .01));
-
 origNumFeatures = size(data,2)-1;
 accPerFeature = zeros(3,origNumFeatures);
-% for i = 1:origNumFeatures
 
 numPoints = size(data,1);
 
@@ -78,21 +86,18 @@ accPerFeature(:,i) = acc;
 X = (-3:0.1:3)';
 testSize = size(X,1);
 
-cRange = 2;
+cRange = accelIndicies;
 
 figure
-xlabel('vals -3 to 3');
-ylabel('max accel');
-
 for i = cRange
     
     Z = zeros(testSize, numFeatures);
-    Z(:,i) = X;
+    Z(:,i-1) = X;
     
     Y = svmpredict(zeros(testSize,1),Z,model,  '-q');
     Yt = invZScore(Y, mu(1), sig(1));
-    Xt = invZScore(X, mu(cRange), sig(cRange));
-    plot(Xt,Yt);
+    Xt = invZScore(X, mu(i), sig(i));
+    scatter(Xt,Yt,'.');
     hold on;
 end
 
