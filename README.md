@@ -24,8 +24,9 @@ totalData.mat contains simulated data. This represents a period of time in which
  - umax = max displacements
  - vmax = max velocities
  
- ### Process
+
+### Process
  
- We currently use LibSVM to do support vector regression on our data set. We are using a radial basis function kernel and seeing great results.
+We currently use LibSVM to do support vector regression on our data set. We are using a radial basis function kernel and seeing great results.
  
  
