@@ -14,7 +14,6 @@
 % v = velocity data
 % umax = max displacements
 % vmax = max velocities
-
 clear;
 
 load('totalData.mat');
@@ -86,9 +85,11 @@ accPerFeature(:,i) = acc;
 X = (-3:0.1:3)';
 testSize = size(X,1);
 
-cRange = accelIndicies;
+cRange = weatherIndicies;
 
 figure
+
+
 for i = cRange
     
     Z = zeros(testSize, numFeatures);
@@ -97,7 +98,11 @@ for i = cRange
     Y = svmpredict(zeros(testSize,1),Z,model,  '-q');
     Yt = invZScore(Y, mu(1), sig(1));
     Xt = invZScore(X, mu(i), sig(i));
-    scatter(Xt,Yt,'.');
+    plot(Xt,Yt);
     hold on;
 end
+
+ylabel('Natural Frequency')
+xlabel('+ and - 3 std D')
+legend('Temperature','Humidity','Time of Day')
 
